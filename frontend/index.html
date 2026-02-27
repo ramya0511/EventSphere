@@ -91,7 +91,10 @@ background:green;
 <body>
 
 <div class="navbar">EventSphere</div>
-
+<button onclick="logout()" 
+style="float:right;background:red">
+Logout
+</button>
 <div class="container">
 
 <!-- CREATE EVENT -->
@@ -108,7 +111,7 @@ background:green;
 </div>
 
 <!-- EVENT LIST -->
-<div class="section">
+<div class="section" id ="adminPanel">
 <h2>Upcoming Events</h2>
 <div id="events"></div>
 </div>
@@ -116,7 +119,12 @@ background:green;
 </div>
 
 <script>
-
+if(!localStorage.getItem("role")){
+window.location="login.html";
+}
+if(localStorage.getItem("role")!=="admin"){
+document.getElementById("adminPanel").style.display="none";
+}
 /* LOAD EVENTS */
 async function loadEvents(){
 
@@ -152,7 +160,10 @@ Delete
 
 });
 }
-
+function logout(){
+localStorage.removeItem("role");
+window.location="login.html";
+}
 /* CREATE EVENT */
 async function addEvent(){
 
