@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+
+  backend:
+    build: ./backend
+    container_name: eventsphere_backend
+    restart: always
+
+  nginx:
+    image: nginx:latest
+    container_name: eventsphere_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend

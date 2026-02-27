@@ -1,0 +1,14 @@
+<h1>EventSphere</h1>
+
+<button onclick="load()">Load Events</button>
+
+<div id="events"></div>
+
+<script>
+async function load(){
+let res = await fetch("/api/events");
+let data = await res.json();
+document.getElementById("events").innerHTML =
+JSON.stringify(data);
+}
+</script>
