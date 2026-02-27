@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>EventSphere</title>
+<title>EventSphere Student Portal</title>
 
 <style>
 body{background:#acadf3;font-family:Arial;margin:0;}
@@ -10,19 +10,19 @@ body{background:#acadf3;font-family:Arial;margin:0;}
 background:#5f62f0;
 color:white;
 padding:18px;
-font-size:30px;
-text-align:center;
+font-size:28px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
-
 .container{width:80%;margin:auto;padding:20px;}
-
 .card{
 background:white;
 padding:20px;
-margin:10px 0;
+margin:15px 0;
 border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
-
 button{
 background:green;
 color:white;
@@ -31,8 +31,8 @@ padding:8px 12px;
 border-radius:5px;
 cursor:pointer;
 }
+.logoutBtn{background:red;}
 </style>
-
 </head>
 
 <body>
@@ -44,8 +44,11 @@ window.location="login.html";
 </script>
 
 <div class="navbar">
-EventSphere Student Portal
-<button onclick="logout()" style="float:right;background:red">Logout</button>
+<span>EventSphere Student Portal</span>
+<div>
+<a href="admin.html" style="color:white;margin-right:20px;">Admin Panel</a>
+<button class="logoutBtn" onclick="logout()">Logout</button>
+</div>
 </div>
 
 <div class="container">
@@ -106,4 +109,4 @@ loadEvents();
 </script>
 
 </body>
-</html>
+</html>0000000

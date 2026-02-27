@@ -2,17 +2,45 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Admin Panel</title>
+<title>Admin Dashboard</title>
 
 <style>
 body{background:#eef2ff;font-family:Arial;margin:0;}
-.nav{background:#4338ca;color:white;padding:15px;text-align:center;font-size:25px;}
+.nav{
+background:#4338ca;
+color:white;
+padding:15px;
+font-size:25px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
 .container{width:80%;margin:auto;padding:20px;}
-.card{background:white;padding:20px;margin:10px 0;border-radius:10px;}
-button{padding:8px 12px;border:none;color:white;background:red;border-radius:5px;cursor:pointer;}
-input{width:100%;padding:10px;margin:5px 0;}
+.card{
+background:white;
+padding:20px;
+margin:15px 0;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+input,textarea{
+width:100%;
+padding:10px;
+margin:8px 0;
+border-radius:6px;
+border:1px solid #ccc;
+}
+button{
+padding:8px 12px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+color:white;
+}
+.createBtn{background:green;}
+.deleteBtn{background:red;margin-top:10px;}
+.logoutBtn{background:black;}
 </style>
-
 </head>
 
 <body>
@@ -24,8 +52,11 @@ window.location="login.html";
 </script>
 
 <div class="nav">
-Admin Dashboard
-<button onclick="logout()" style="float:right;background:black">Logout</button>
+<span>Admin Dashboard</span>
+<div>
+<a href="index.html" style="color:white;margin-right:20px;">Student View</a>
+<button class="logoutBtn" onclick="logout()">Logout</button>
+</div>
 </div>
 
 <div class="container">
@@ -37,7 +68,7 @@ Admin Dashboard
 <input id="location" placeholder="Location">
 <textarea id="description" placeholder="Description"></textarea>
 
-<button onclick="create()" style="background:green">Create Event</button>
+<button class="createBtn" onclick="create()">Create Event</button>
 
 <h2>Manage Events</h2>
 <div id="events"></div>
@@ -56,12 +87,17 @@ let res=await fetch("/api/events");
 let data=await res.json();
 
 let html="";
+
 data.forEach(e=>{
 html+=`
 <div class="card">
 <h3>${e.title}</h3>
-<p>${e.location}</p>
-<button onclick="del('${e.id}')">Delete</button>
+<p><b>Date:</b> ${e.date}</p>
+<p><b>Location:</b> ${e.location}</p>
+<p>${e.description}</p>
+<button class="deleteBtn" onclick="del('${e.id}')">
+Delete
+</button>
 </div>`;
 });
 
