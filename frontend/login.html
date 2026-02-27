@@ -2,17 +2,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Login - EventSphere</title>
+<title>EventSphere Login</title>
 
 <style>
-
 body{
-font-family:Arial;
 background:#111827;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
+font-family:Arial;
 color:white;
 }
 
@@ -28,8 +27,8 @@ input{
 width:100%;
 padding:10px;
 margin:10px 0;
-border:none;
 border-radius:5px;
+border:none;
 }
 
 button{
@@ -41,21 +40,18 @@ border:none;
 border-radius:5px;
 cursor:pointer;
 }
-
 </style>
 </head>
 
 <body>
 
 <div class="box">
-
 <h2>EventSphere Login</h2>
 
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
 
 <button onclick="login()">Login</button>
-
 <p id="msg"></p>
 
 </div>
@@ -67,17 +63,16 @@ function login(){
 const user=username.value;
 const pass=password.value;
 
-/* DEMO USERS */
 if(user==="admin" && pass==="admin123"){
 localStorage.setItem("role","admin");
-window.location="index.html";
+window.location="admin.html";
 }
 else if(user==="student" && pass==="1234"){
-localStorage.setItem("role","user");
+localStorage.setItem("role","student");
 window.location="index.html";
 }
 else{
-msg.innerText="Invalid login";
+msg.innerText="Invalid Login";
 }
 
 }

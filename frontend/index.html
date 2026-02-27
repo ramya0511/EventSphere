@@ -1,205 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>EventSphere</title>
 
-<link rel="icon" href="data:,">
-
 <style>
-
-body{
-background:#acadf3;
-margin:0;
-}
-
+body{background:#acadf3;font-family:Arial;margin:0;}
 .navbar{
 background:#5f62f0;
-color:rgb(255, 255, 255);
-padding:18px;
-font-size:35px;
-text-align:center;
-font-weight:bold;
-font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-
-.container{
-max-width:900px;
-margin:auto;
-padding:30px;
-}
-
-.section{
-background:#b7b8de;
-padding:20px;
-border-radius:12px;
-box-shadow:0 4px 12px rgba(0,0,0,0.08);
-margin-bottom:25px;
-}
-
-input, textarea{
-width:100%;
-padding:10px;
-margin:8px 0;
-border-radius:6px;
-border:1px solid #ccc;
-}
-
-button{
-background:#2563eb;
 color:white;
-border:none;
-padding:10px 15px;
-border-radius:6px;
-cursor:pointer;
-font-size:14px;
+padding:18px;
+font-size:30px;
+text-align:center;
 }
 
-button:hover{
-background:#1e40af;
-}
+.container{width:80%;margin:auto;padding:20px;}
 
 .card{
 background:white;
 padding:20px;
-margin-top:15px;
+margin:10px 0;
 border-radius:10px;
-box-shadow:0 3px 10px rgba(0,0,0,0.1);
-transition:0.3s;
 }
 
-.card:hover{
-transform:scale(1.02);
-}
-
-.actions{
-margin-top:10px;
-}
-
-.delete{
-background:red;
-margin-left:10px;
-}
-
-.register{
+button{
 background:green;
+color:white;
+border:none;
+padding:8px 12px;
+border-radius:5px;
+cursor:pointer;
 }
-
 </style>
+
 </head>
 
 <body>
 
-<div class="navbar">EventSphere</div>
-<button onclick="logout()" 
-style="float:right;background:red">
-Logout
-</button>
+<script>
+if(localStorage.getItem("role")!=="student"){
+window.location="login.html";
+}
+</script>
+
+<div class="navbar">
+EventSphere Student Portal
+<button onclick="logout()" style="float:right;background:red">Logout</button>
+</div>
+
 <div class="container">
 
-<!-- CREATE EVENT -->
-<div class="section">
-<h2>Create Event</h2>
-
-<input id="title" placeholder="Event Title">
-<input id="date" type="date">
-<input id="location" placeholder="Location">
-<textarea id="description" placeholder="Description"></textarea>
-
-<button onclick="addEvent()">Create Event</button>
-
-</div>
-
-<!-- EVENT LIST -->
-<div class="section" id ="adminPanel">
-<h2>Upcoming Events</h2>
+<h2>Available Events</h2>
 <div id="events"></div>
-</div>
 
 </div>
 
 <script>
-if(!localStorage.getItem("role")){
-window.location="login.html";
-}
-if(localStorage.getItem("role")!=="admin"){
-document.getElementById("adminPanel").style.display="none";
-}
-/* LOAD EVENTS */
-async function loadEvents(){
 
-const res = await fetch("/api/events");
-const data = await res.json();
-
-const container = document.getElementById("events");
-container.innerHTML="";
-
-data.forEach(e=>{
-
-container.innerHTML += `
-<div class="card">
-
-<h3>${e.title}</h3>
-
-<p><b>Date:</b> ${e.date}</p>
-<p><b>Location:</b> ${e.location}</p>
-<p>${e.description}</p>
-
-<div class="actions">
-<button class="register" onclick="registerEvent('${e.id}')">
-Register
-</button>
-
-<button class="delete" onclick="deleteEvent('${e.id}')">
-Delete
-</button>
-</div>
-
-</div>
-`;
-
-});
-}
 function logout(){
 localStorage.removeItem("role");
 window.location="login.html";
 }
-/* CREATE EVENT */
-async function addEvent(){
 
-const event={
-title:title.value,
-date:date.value,
-location:location.value,
-description:description.value
-};
+async function loadEvents(){
 
-await fetch("/api/events",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify(event)
+const res=await fetch("/api/events");
+const data=await res.json();
+
+let html="";
+
+data.forEach(e=>{
+html+=`
+<div class="card">
+<h3>${e.title}</h3>
+<p><b>Date:</b> ${e.date}</p>
+<p><b>Location:</b> ${e.location}</p>
+<p>${e.description}</p>
+
+<button onclick="registerEvent('${e.id}')">
+Register
+</button>
+
+</div>`;
 });
 
-/* clear form */
-title.value="";
-date.value="";
-location.value="";
-description.value="";
-
-loadEvents();
+events.innerHTML=html;
 }
 
-/* DELETE EVENT */
-async function deleteEvent(id){
-
-await fetch("/api/events/"+id,{
-method:"DELETE"
-});
-
-loadEvents();
-}
-
-/* REGISTER EVENT */
 async function registerEvent(id){
 
 await fetch("/api/register",{
@@ -211,10 +98,9 @@ user:"Student"
 })
 });
 
-alert("✅ Successfully Registered!");
+alert("Registered Successfully!");
 }
 
-/* INITIAL LOAD */
 loadEvents();
 
 </script>
