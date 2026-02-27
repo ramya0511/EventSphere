@@ -1,57 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>EventSphere</title>
 
+<link rel="icon" href="data:,">
+
 <style>
+
 body{
-font-family: Arial;
-background:#f4f6f8;
-padding:40px;
+font-family:Arial, Helvetica, sans-serif;
+background:#f3f4f6;
+margin:0;
 }
 
-h1{
+.navbar{
+background:#111827;
+color:white;
+padding:18px;
+font-size:22px;
 text-align:center;
+font-weight:bold;
 }
 
 .container{
 max-width:900px;
 margin:auto;
+padding:30px;
+}
+
+.section{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.08);
+margin-bottom:25px;
+}
+
+input, textarea{
+width:100%;
+padding:10px;
+margin:8px 0;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+button{
+background:#2563eb;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:6px;
+cursor:pointer;
+font-size:14px;
+}
+
+button:hover{
+background:#1e40af;
 }
 
 .card{
 background:white;
 padding:20px;
-margin:15px 0;
+margin-top:15px;
 border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,0.1);
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+transition:0.3s;
 }
 
-button{
-background:#007bff;
-color:white;
-border:none;
-padding:10px 15px;
-border-radius:5px;
-cursor:pointer;
+.card:hover{
+transform:scale(1.02);
 }
 
-input,textarea{
-width:100%;
-padding:10px;
-margin:5px 0;
+.actions{
+margin-top:10px;
 }
+
+.delete{
+background:red;
+margin-left:10px;
+}
+
+.register{
+background:green;
+}
+
 </style>
-<link rel="icon" href="data:,">
 </head>
 
 <body>
 
+<div class="navbar">🎉 EventSphere Event Management</div>
+
 <div class="container">
 
-<h1>EventSphere</h1>
-
-<h3>Create Event</h3>
+<!-- CREATE EVENT -->
+<div class="section">
+<h2>Create Event</h2>
 
 <input id="title" placeholder="Event Title">
 <input id="date" type="date">
@@ -60,15 +105,21 @@ margin:5px 0;
 
 <button onclick="addEvent()">Create Event</button>
 
-<h2>Upcoming Events</h2>
+</div>
 
+<!-- EVENT LIST -->
+<div class="section">
+<h2>Upcoming Events</h2>
 <div id="events"></div>
+</div>
 
 </div>
 
 <script>
 
+/* LOAD EVENTS */
 async function loadEvents(){
+
 const res = await fetch("/api/events");
 const data = await res.json();
 
@@ -76,23 +127,40 @@ const container = document.getElementById("events");
 container.innerHTML="";
 
 data.forEach(e=>{
+
 container.innerHTML += `
 <div class="card">
+
 <h3>${e.title}</h3>
+
 <p><b>Date:</b> ${e.date}</p>
 <p><b>Location:</b> ${e.location}</p>
 <p>${e.description}</p>
-</div>`;
+
+<div class="actions">
+<button class="register" onclick="registerEvent('${e.id}')">
+Register
+</button>
+
+<button class="delete" onclick="deleteEvent('${e.id}')">
+Delete
+</button>
+</div>
+
+</div>
+`;
+
 });
 }
 
+/* CREATE EVENT */
 async function addEvent(){
 
 const event={
-title:document.getElementById("title").value,
-date:document.getElementById("date").value,
-location:document.getElementById("location").value,
-description:document.getElementById("description").value
+title:title.value,
+date:date.value,
+location:location.value,
+description:description.value
 };
 
 await fetch("/api/events",{
@@ -101,9 +169,41 @@ headers:{"Content-Type":"application/json"},
 body:JSON.stringify(event)
 });
 
+/* clear form */
+title.value="";
+date.value="";
+location.value="";
+description.value="";
+
 loadEvents();
 }
 
+/* DELETE EVENT */
+async function deleteEvent(id){
+
+await fetch("/api/events/"+id,{
+method:"DELETE"
+});
+
+loadEvents();
+}
+
+/* REGISTER EVENT */
+async function registerEvent(id){
+
+await fetch("/api/register",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+eventId:id,
+user:"Student"
+})
+});
+
+alert("✅ Successfully Registered!");
+}
+
+/* INITIAL LOAD */
 loadEvents();
 
 </script>

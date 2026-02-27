@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="css/style.css">
+
+<div class="nav">Admin Panel</div>
+
+<div class="container">
+
+<h2>Create Event</h2>
+
+<input id="title" placeholder="Title">
+<input id="date" type="date">
+<input id="location" placeholder="Location">
+
+<button onclick="create()">Create</button>
+
+<h2>Manage Events</h2>
+<div id="events"></div>
+
+</div>
+
+<script>
+
+async function load(){
+let res=await fetch("/api/events");
+let data=await res.json();
+
+let html="";
+data.forEach(e=>{
+html+=`
+<div class="card">
+<h3>${e.title}</h3>
+<button onclick="del('${e.id}')">Delete</button>
+</div>`;
+});
+
+document.getElementById("events").innerHTML=html;
+}
+
+async function create(){
+await fetch("/api/events",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+title:title.value,
+date:date.value,
+location:location.value
+})
+});
+load();
+}
+
+async function del(id){
+await fetch("/api/events/"+id,{method:"DELETE"});
+load();
+}
+
+load();
+
+</script>
