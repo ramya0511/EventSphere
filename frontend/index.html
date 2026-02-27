@@ -42,13 +42,14 @@ padding:10px;
 margin:5px 0;
 }
 </style>
+<link rel="icon" href="data:,">
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>🎉 EventSphere</h1>
+<h1>EventSphere</h1>
 
 <h3>Create Event</h3>
 
@@ -57,7 +58,7 @@ margin:5px 0;
 <input id="location" placeholder="Location">
 <textarea id="description" placeholder="Description"></textarea>
 
-<button onclick="createEvent()">Create Event</button>
+<button onclick="addEvent()">Create Event</button>
 
 <h2>Upcoming Events</h2>
 
@@ -85,7 +86,7 @@ container.innerHTML += `
 });
 }
 
-async function createEvent(){
+async function addEvent(){
 
 const event={
 title:document.getElementById("title").value,
